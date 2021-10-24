@@ -7,6 +7,8 @@ const cheerio = require('cheerio');
 const { json } = require('express');
 const upload = multer();
 
+const tensorEngine = require('../tensorflow/predict');
+
 router.use(upload.array());
 router.use(express.static('public'));
 
@@ -34,10 +36,13 @@ router.post('/evaluate', async function(req, res) {
     let contents = await parse(req.body.website);
 
     let tensorScore = evaluateContents(contents);
+    console.log("tensorScore = " + tensorScore);
 
     let jsonObj = [];
+    /*
     if (tensorScore < 0.7) {
-      let recommended = getRecommended(title);
+
+      let recommended = await getRecommended(title);
 
       for (let key of recommended.keys()) {
         jsonObj.push({
@@ -47,13 +52,18 @@ router.post('/evaluate', async function(req, res) {
         });
       }
     } else {
-
       jsonObj.push({
         "website" : req.body.website,
         "title"   : title,
         "score"   : tensorScore
-      })
+      });
     }
+    */
+    jsonObj.push({
+      "website" : req.body.website,
+      "title"   : title,
+      "score"   : tensorScore
+    });
 
     res.json(jsonObj);
   } else {
@@ -62,10 +72,10 @@ router.post('/evaluate', async function(req, res) {
 })
 
 function evaluateContents(contents) {
-  return 0;
+  return tensorEngine.predict(contents);
 }
 
-function getRecommended(title) {
+async function getRecommended(title) {
   let websites = [];
 
   // get websites from google based on param: title
@@ -100,7 +110,7 @@ function getRecommended(title) {
 //   });
 // }
 
-function parse (url) {
+async function parse (url) {
   return rp(url)
     .then(function(html){
       const $ = cheerio.load(html);
@@ -132,7 +142,7 @@ function parse (url) {
     });
 }
 
-function grabTitle (url) {
+async function grabTitle (url) {
   return rp(url)
     .then(function(html) {
       const $ = cheerio.load(html);

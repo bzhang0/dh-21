@@ -7,24 +7,34 @@ const cheerio = require('cheerio');
 const { json } = require('express');
 const upload = multer();
 
-const tensorEngine = require('../tensorflow/predict');
-
 router.use(upload.array());
 router.use(express.static('public'));
 
 const TENSOR_LENGTH = 100;
 
-/* GET home page. */
-router.get('/hello', async function(req, res) {
-  res.type("text").send("hello");
+router.post('/process', async function(req, res) {
+  console.log("hi");
+  console.log(req.body.website);
+  if (req.body.website) {
+
+    console.log("passed");
+
+    let title = await grabTitle(req.body.website);
+    let contents = await parse(req.body.website);
+
+    console.log(title);
+    console.log(contents);
+
+    res.json({
+      "title" : title,
+      "contents" : contents
+    });
+  } else {
+    res.type("text").send("BAD");
+  }
 });
 
-router.get('/evaluate/:website', async function(req, res) {
-  let website = req.params.website;
-
-  res.type("text").send(website);
-});
-
+/*
 router.post('/evaluate', async function(req, res) {
   console.log("hi");
 
@@ -39,7 +49,7 @@ router.post('/evaluate', async function(req, res) {
     console.log("tensorScore = " + tensorScore);
 
     let jsonObj = [];
-    /*
+
     if (tensorScore < 0.7) {
 
       let recommended = await getRecommended(title);
@@ -58,7 +68,7 @@ router.post('/evaluate', async function(req, res) {
         "score"   : tensorScore
       });
     }
-    */
+
     jsonObj.push({
       "website" : req.body.website,
       "title"   : title,
@@ -97,20 +107,9 @@ async function getRecommended(title) {
 
   return new Map([...results.entries()].sort((a, b) => b[1] - a[1]));
 }
+// } */
 
-
-// node.js program that parses an html website and returns all the elements with the <p> tags
-// function process() {
-//   var fs = require('fs');
-//   var cheerio = require('cheerio');
-//   var $ = cheerio.load(fs.readFileSync('index.html'));
-//   var results = [];
-//   $('p').each(function(i, elem) {
-//       results[i] = $(this).text();
-//   });
-// }
-
-async function parse (url) {
+function parse (url) {
   return rp(url)
     .then(function(html){
       const $ = cheerio.load(html);
@@ -142,7 +141,7 @@ async function parse (url) {
     });
 }
 
-async function grabTitle (url) {
+function grabTitle (url) {
   return rp(url)
     .then(function(html) {
       const $ = cheerio.load(html);

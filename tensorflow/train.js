@@ -9,7 +9,7 @@ const fs = require('fs');
 const sequenceLength = 100;
 
 // the max number of rows to read
-const LIMIT = 100;
+const LIMIT = -1;
 
 // trains the model
 async function start() {
@@ -57,12 +57,12 @@ function createModel() {
     // first layer
     model.add(tf.layers.dense({
         inputShape: [sequenceLength],
-        units: 32,
+        units: 64,
     }));
 
     // second layer
     model.add(tf.layers.dense({
-        units: 32,
+        units: 128,
     }));
 
     // third layer

@@ -32,27 +32,27 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1>vLidity: enter an article URL to start!</h1>
           <h2>{this.state.textField}</h2>
-          <h2>{this.displayScore}</h2>  
+          <h2>{this.displayScore}</h2>
           <WebsiteField onClick={this.callAPI}></WebsiteField>
         </header>
-        
+
       </div>
     );
   }
 
   callAPI = async (val) => {
     let params = new FormData();
-    params.append("webiste", val);
+    console.log(val);
+    params.append("website", val);
 
     let endpoint = "process";
 
     let apiURL = "http://localhost:8000/" + endpoint;
     let res = await fetch(apiURL, {method:"POST", body: params})
-                         .then(this.statusCheck)
                          .then(response => response.json())
-                         .catch(this.handleError  );
+                         .catch(this.handleError);
 
-    
+
     // hehe
     if (res === undefined){
       return;
@@ -73,11 +73,12 @@ class App extends React.Component {
     return response;
   }
 
-  handleError = () => {
+  handleError = (err) => {
+    console.log(err)
     alert("Error: bad URL");
   }
 
-  
+
 }
 
 export default App;

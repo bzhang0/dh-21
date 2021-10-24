@@ -65,6 +65,8 @@ app.post('/process', async function(req, res) {
         let title = response.title;
         let contents = response.contents;
 
+        console.log(title + " " + contents);
+
         let tensorScore = await evaluateContents(contents);
 
         console.log("tensorScore = " + tensorScore);

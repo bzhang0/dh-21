@@ -33,15 +33,22 @@ class WebsiteField extends React.Component {
     render() {
         return (
         <div class="mb-3">
-            <Form >
+            <form onSubmit={this.handleSubmit}>
+            <label>
+              URL:
+              <textarea value={this.state.value} onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Submit" />
+          </form>
+            {/* <Form >
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>URL:</Form.Label>
                 <Form.Control placeholder="Enter a Website URL" class= "form-control form-control-lg" type="email" rows="5" cols = "100"></Form.Control>
                 {/* <textarea placeholder={this.state.value} onChange={this.handleChange} /> */}
-                </Form.Group>
+                {/* </Form.Group>
                 <Button variant="primary" type="submit" value="Submit" onClick={this.handleSubmit} size="lg"/>
-            </Form>
-        </div>) 
+            </Form> */}
+        </div>)
     }
 }
 

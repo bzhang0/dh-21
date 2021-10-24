@@ -1,5 +1,5 @@
 # Using the Tensorfow model
-The Tensorflow model is accessible through the `predict.js` file. Therein exists a function named `predict` that allows you to query the model for a prediction. See `(test.js)[https://github.com/bzhang0/dh-21/blob/main/tensorflow/test.js]` for an example.
+The Tensorflow model is accessible through the `predict.js` file. Therein exists a function named `predict` that allows you to query the model for a prediction. See (test.js)[https://github.com/bzhang0/dh-21/blob/main/tensorflow/test.js] for an example.
 
 ## Steps
 1. Add tensorflow.js as a dependency: 

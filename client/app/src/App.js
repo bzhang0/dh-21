@@ -42,9 +42,9 @@ class App extends React.Component {
 
   callAPI = async (val) => {
     let params = new FormData();
-    params.append("url", val);
+    params.append("webiste", val);
 
-    let endpoint = "test";
+    let endpoint = "process";
 
     let apiURL = "http://localhost:8000/" + endpoint;
     let res = await fetch(apiURL, {method:"POST", body: params})
